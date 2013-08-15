@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Flog!</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/static/js/jquery-1.10.2.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- for bootstrap responsive mode -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+  	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Flog - the flask blog</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>Flog: <a href="/index">Home</a></div>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
