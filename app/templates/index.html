@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
+<hr>
 <div id="content">
 {% for entry in entries %}
 <div>
+	<h2>{{entry.title}}</h2>
 	<p>
-		<span class="label label-info">{{entry.author.name}} </span>
-		{{entry.body}}
+		Posted by: <span class="label label-info">{{entry.author.name}}</span> on: January 3rd, 2013
+		<p>{{entry.body}}</p>
 	</p>
 </div>
 	{% endfor %}

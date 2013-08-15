@@ -7,10 +7,12 @@ def index():
 	page_title = "Flog 0.01"
 	entries = [
 		{
+			'title': 'First post',
 			'author': { 'name': 'Jani Nieminen' },
 			'body': 'Eka postaus'
 		},
 		{
+			'title': 'Second post',
 			'author': { 'name': 'Jani Nieminen' },
 			'body': 'Toka postaus'
 		}
