@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, SmallInteger
 from database import Base
 
 class User(Base):
@@ -7,6 +7,16 @@ class User(Base):
 	user_id = Column(Integer, primary_key = True)
 	realname = Column(String(200), nullable = False)
 	login_name = Column(String(100), nullable = False)
+	password = Column(String(200), nullable = False)
+	admin = Column(SmallInteger, default = 0)
+
+	def __init__(self, realname=None, login_name=None, password=None):
+		self.realname = realname
+		self.login_name = login_name
+		self.password = password
+
+	def is_admin(self):
+		return bool(self.admin)
 
 	def is_authenticated(self):
 		return True
@@ -21,7 +31,7 @@ class User(Base):
 		return unicode(self.id)
 
 	def __repr__(self):
-		'<User %r, %r, %r>' % (self.user_id, self.realname, self.login_name)
+		return '<User %r, %r, %r>' % (self.user_id, self.realname, self.login_name)
 
 class Entry(Base):
 	__tablename__ = 'entry'
@@ -35,4 +45,4 @@ class Entry(Base):
 		self.text = text
 
 	def __repr__(self):
-		'<Entry %r>' % (self.title)
+		return '<Entry %r>' % (self.title)
