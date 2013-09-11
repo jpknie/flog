@@ -41,12 +41,7 @@ class Entry(db.Model):
 	title = db.Column(db.String(20), unique=False)
 	create_time = db.Column(db.DateTime)
 	text = db.Column(db.String(200), unique=False)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-	def __init__(self, title=None, create_time=None, text=None):
-		self.title = title
-		self.create_time = create_time
-		self.text = text
+	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
 
 	def __repr__(self):
 		return '<Entry %r, %r, %r>' % (self.title, self.create_time, self.text)
