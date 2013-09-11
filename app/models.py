@@ -1,14 +1,15 @@
-from sqlalchemy import Column, Integer, String, SmallInteger
-from database import Base
+from flask.ext.sqlalchemy import SQLAlchemy
+from database import db
 
-class User(Base):
+class User(db.Model):
 	__tablename__ = 'user'
 
-	user_id = Column(Integer, primary_key = True)
-	realname = Column(String(200), nullable = False)
-	login_name = Column(String(100), nullable = False)
-	password = Column(String(200), nullable = False)
-	admin = Column(SmallInteger, default = 0)
+	user_id = db.Column(db.Integer, primary_key = True)
+	realname = db.Column(db.String(200), nullable = False)
+	login_name = db.Column(db.String(100), nullable = False)
+	password = db.Column(db.String(200), nullable = False)
+	admin = db.Column(db.SmallInteger, default = 0)
+	entries = db.relationship('Entry', backref = 'author', lazy = 'dynamic')
 
 	def __init__(self, realname=None, login_name=None, password=None):
 		self.realname = realname
@@ -33,16 +34,19 @@ class User(Base):
 	def __repr__(self):
 		return '<User %r, %r, %r>' % (self.user_id, self.realname, self.login_name)
 
-class Entry(Base):
+class Entry(db.Model):
 	__tablename__ = 'entry'
 
-	id = Column(Integer, primary_key=True)
-	title = Column(String(20), unique=False)
-	text = Column(String(200), unique=False)
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(20), unique=False)
+	create_time = db.Column(db.DateTime)
+	text = db.Column(db.String(200), unique=False)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	def __init__(self, title=None, text=None):
+	def __init__(self, title=None, create_time=None, text=None):
 		self.title = title
+		self.create_time = create_time
 		self.text = text
 
 	def __repr__(self):
-		return '<Entry %r>' % (self.title)
+		return '<Entry %r, %r, %r>' % (self.title, self.create_time, self.text)
