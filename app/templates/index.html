@@ -2,14 +2,24 @@
 {% block content %}
 <hr>
 <div id="content">
-{% for entry in entries %}
-<div>
-	<h2>{{entry.title}}</h2>
-	<p>
-		Posted by: <span class="label label-info">{{entry.author.name}}</span> on: January 3rd, 2013
-		<p>{{entry.body}}</p>
+	{% for entry in entries %}
+	<div>
+		<h2>{{entry.title}}</h2>
+		<p>
+			Posted by: <span class="label label-info">{{entry.author.realname}}</span> on: {{entry.create_time}}
+		<p>{{entry.text}}</p>
 	</p>
-</div>
+	</div>
 	{% endfor %}
-	{% endblock %}
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+		{% for message in messages %}
+		<li>{{ message }}</li>
+		{% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 </div>
+{% endblock %}

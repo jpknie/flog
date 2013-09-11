@@ -1,6 +1,9 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from database import db
 
+#tags = db.Table('entrytags',
+#	db.Column(''))
+
 class User(db.Model):
 	__tablename__ = 'user'
 
@@ -9,7 +12,7 @@ class User(db.Model):
 	login_name = db.Column(db.String(100), nullable = False)
 	password = db.Column(db.String(200), nullable = False)
 	admin = db.Column(db.SmallInteger, default = 0)
-	entries = db.relationship('Entry', backref = 'author', lazy = 'dynamic')
+	entries = db.relationship('Entry', backref = 'author', lazy = 'joined')
 
 	def __init__(self, realname=None, login_name=None, password=None):
 		self.realname = realname
