@@ -1,7 +1,6 @@
 # Flog is basic blog application for Flask
 # authored by Jani Nieminen (jpknie@utu.fi)
 
-from database import db_session
 from flask import Flask
 from flask.ext.login import LoginManager
 
