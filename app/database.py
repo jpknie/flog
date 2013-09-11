@@ -1,20 +1,7 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
+from app import app
+from flask.ext.sqlalchemy import SQLAlchemy
 import os
 
-uri = os.environ.get('DATABASE_URL', 'postgresql://janiniem:devpass@localhost/flog')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://janiniem:devpass@localhost/flog'
 
-engine = create_engine(uri, convert_unicode = True)
-
-db_session = scoped_session(sessionmaker(autocommit=False,
-					 autoflush=False,
-					 bind=engine))
-
-Base = declarative_base()
-Base.query = db_session.query_property()
-
-def init_db():
-  import models
-  Base.metadata.create_all(bind = engine)
+db = SQLAlchemy(app)
