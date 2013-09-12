@@ -9,3 +9,6 @@ class LoginForm(Form):
 class EntryForm(Form):
 	title = TextField('Title',[Required()])
 	text = TextAreaField('Content',[Required()])
+
+class TagForm(Form):
+	name = TextField('Name', [Required()])
