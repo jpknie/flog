@@ -1,8 +1,10 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from database import db
 
-#tags = db.Table('entrytags',
-#	db.Column(''))
+tags = db.Table('tags',
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
+    db.Column('entry_id', db.Integer, db.ForeignKey('entry.id'))
+)
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -41,10 +43,20 @@ class Entry(db.Model):
 	__tablename__ = 'entry'
 
 	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(20), unique=False)
+	title = db.Column(db.String(200), unique=False)
 	create_time = db.Column(db.DateTime)
-	text = db.Column(db.String(200), unique=False)
+	text = db.Column(db.String(500), unique=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+	tags = db.relationship('Tag', secondary=tags, backref=db.backref('entries', lazy='dynamic'))
 
 	def __repr__(self):
 		return '<Entry %r, %r, %r>' % (self.title, self.create_time, self.text)
+
+class Tag(db.Model):
+	__tablename__ = 'tag'
+
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(200))
+
+	def __init__(self, name):
+		self.name = name
