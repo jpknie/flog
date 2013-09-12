@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+<br>
+{% block content %}
+    <br>
+    <form action="" method="post" class="form">
+    {{ form.csrf_token }}
+      <dl>
+        <dt>Name for the tag:
+        <dd>{{ form['name'] }}
+        <dd><input type=submit value="Save">
+      </dl>
+    </form>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+		{% for message in messages %}
+		<li>{{ message }}</li>
+		{% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+{% endblock %}
