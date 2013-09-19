@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-<br>
 {% block content %}
-    <br>
+<div class="content">
     <form action="" method="post" class="form">
     {{ form.csrf_token }}
       <dl>
@@ -10,7 +9,6 @@
         <dd><input type=submit value="Save">
       </dl>
     </form>
-    <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
@@ -20,4 +18,5 @@
     </ul>
     {% endif %}
     {% endwith %}
+</div>
 {% endblock %}
