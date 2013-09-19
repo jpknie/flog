@@ -2,8 +2,10 @@ from app import app, lm
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from flask import render_template, Flask, request, session, g, redirect, url_for, \
 	abort, flash
+from sqlalchemy.exc import IntegrityError
 from forms import LoginForm, EntryForm, TagForm
 from config import ITEMS_PER_PAGE
+from utilities import chunks
 from models import *
 
 import datetime
@@ -33,6 +35,20 @@ def add_tag():
 		return redirect(url_for('tags'))
 	form = TagForm(request.form)
 	page_title = 'Add new tag'
+	if request.method == 'POST' and form.validate_on_submit():
+		tag = Tag()
+		form.populate_obj(tag)
+		try:
+			db.session.add(tag)
+			db.session.commit()
+		except IntegrityError, exc:
+			reason = exc.message
+			if reason.find('unique constraint'):
+				flash('Tag name already found in the database')
+				db.session.rollback()
+				return redirect(url_for('add_tag'))
+		flash('Tag saved successfully')
+		return redirect(url_for('tags'))
 	return render_template('tag_editor.html', form_action = 'add_tag', form = form, page_title = page_title)
 
 @app.route('/edit_tag/<int:tagid>', methods=['GET', 'POST'])
@@ -46,9 +62,11 @@ def edit_tag(tagid):
 
 @app.route('/tags')
 def tags():
-	page_title = 'Tags'
+	page_title = 'Tag collection'
 	tags = Tag.query.all()
-	return render_template('tags.html', page_title = page_title, tags = tags)
+	admin = g.user.is_admin()
+	tags = list(chunks(tags, 4))
+	return render_template('tags.html', page_title = page_title, tags = tags, admin = bool(admin))
 
 @app.route('/add_entry', methods=['GET', 'POST'])
 @login_required
