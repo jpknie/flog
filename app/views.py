@@ -3,6 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from flask import render_template, Flask, request, session, g, redirect, url_for, \
 	abort, flash
 from forms import LoginForm, EntryForm, TagForm
+from config import ITEMS_PER_PAGE
 from models import *
 
 import datetime
@@ -17,10 +18,11 @@ def before_request():
 
 @app.route('/')
 @app.route('/entries')
-def entries():
+@app.route('/entries/<int:page>')
+def entries(page = 1):
 	user = g.user
 	page_title = "Flog 0.01"
-	entries = Entry.query.options(db.joinedload('author')).order_by(Entry.id)
+	entries = Entry().all_entries().paginate(page, ITEMS_PER_PAGE, False)
 	return render_template('entries.html', page_title = page_title, entries = entries)
 
 @app.route('/add_tag', methods=['GET', 'POST'])

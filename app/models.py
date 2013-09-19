@@ -49,6 +49,9 @@ class Entry(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
 	tags = db.relationship('Tag', secondary=tags, backref=db.backref('entries', lazy='dynamic'))
 
+	def all_entries(self):
+		return Entry.query.options(db.joinedload('author'))
+
 	def __repr__(self):
 		return '<Entry %r, %r, %r>' % (self.title, self.create_time, self.text)
 
