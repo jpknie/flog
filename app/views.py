@@ -4,7 +4,7 @@ from flask import render_template, Flask, request, session, g, redirect, url_for
 	abort, flash
 from sqlalchemy.exc import IntegrityError
 from forms import LoginForm, EntryForm, TagForm
-from config import ITEMS_PER_PAGE
+from config import ITEMS_PER_PAGE, COLS_IN_TAG_TABLE
 from utilities import chunks
 from models import *
 
@@ -65,7 +65,7 @@ def tags():
 	page_title = 'Tag collection'
 	tags = Tag.query.all()
 	admin = g.user.is_admin()
-	tags = list(chunks(tags, 4))
+	tags = list(chunks(tags, COLS_IN_TAG_TABLE))
 	return render_template('tags.html', page_title = page_title, tags = tags, admin = bool(admin))
 
 @app.route('/add_entry', methods=['GET', 'POST'])
