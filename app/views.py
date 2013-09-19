@@ -30,16 +30,17 @@ def entries(page = 1):
 def add_tag():
 	if g.user.is_admin() != 1:
 		flash('This user cannot add tags!')
-		return redirect(url_for('entries'))
+		return redirect(url_for('tags'))
 	form = TagForm(request.form)
 	page_title = 'Add new tag'
 	return render_template('tag_editor.html', form_action = 'add_tag', form = form, page_title = page_title)
 
-@app.route('/edit_tag', methods=['GET', 'POST'])
+@app.route('/edit_tag/<int:tagid>', methods=['GET', 'POST'])
 @login_required
 def edit_tag(tagid):
 	if g.user.is_admin() != 1:
 		flash('This user cannot edit tags!')
+		return redirect(url_for('tags'))
 	tag = Tag.query.get(int(tagid))
 	return render_template('tag_editor.html', form_action = 'edit_tag', form = form, page_title = page_title)
 
