@@ -8,7 +8,12 @@
 	{% for row in tags %}
 		<tr>
 		{% for col in row %}
-			<td>{{ col.name }}</td>
+			<td>
+				{{ col.name }}
+				{% if admin == True %}
+					<a href='{{ url_for('edit_tag', tagid = col.id) }}'><i class="icon-edit"></i></a> 
+				{% endif %}
+			</td>
 		{% endfor %}
 		</tr>
 	{% endfor %}
