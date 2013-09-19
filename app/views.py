@@ -57,7 +57,15 @@ def edit_tag(tagid):
 	if g.user.is_admin() != 1:
 		flash('This user cannot edit tags!')
 		return redirect(url_for('tags'))
+	page_title = 'Edit tag'
 	tag = Tag.query.get(int(tagid))
+	form = TagForm(request.form, obj=tag)
+	if request.method == 'POST' and form.validate_on_submit():
+		# save new data in tag here
+		form.populate_obj(tag)
+		db.session.add(tag)
+		db.session.commit()
+		return redirect(url_for('tags'))
 	return render_template('tag_editor.html', form_action = 'edit_tag', form = form, page_title = page_title)
 
 @app.route('/delete_tag/<int:tagid>', methods=['GET', 'POST'])
@@ -76,7 +84,9 @@ def delete_tag(tagid):
 def tags():
 	page_title = 'Tag collection'
 	tags = Tag.query.all()
-	admin = g.user.is_admin()
+	admin = False
+	if g.user is not None and g.user.is_authenticated():
+		admin = g.user.is_admin()
 	tags = list(chunks(tags, COLS_IN_TAG_TABLE))
 	return render_template('tags.html', page_title = page_title, tags = tags, admin = bool(admin))
 
