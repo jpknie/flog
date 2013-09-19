@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<hr>
-<div id="content">
-	{% for tag in tags %}
+<br>
+<h2>
+	Tag collection
+</h2>
+<table class="table">
+	{% for row in tags %}
+		<tr>
+		{% for col in row %}
+			<td>{{ col.name }}</td>
+		{% endfor %}
+		</tr>
 	{% endfor %}
+</table>
 {% endblock %}
