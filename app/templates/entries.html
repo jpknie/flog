@@ -6,7 +6,7 @@
 	<div>
 		<h2>{{entry.title}}</h2>
 		<p>
-			Posted by: <span class="label label-info">{{entry.author.realname}}</span> on: {{entry.create_time}}
+			Posted by: <span class="label label-info">{{entry.author.realname}}</span> on: {{momentjs(entry.create_time).format('LLLL')}}
 		<p>{{entry.text}}</p>
 	</p>
 	</div>

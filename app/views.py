@@ -76,7 +76,7 @@ def add_entry():
 	if request.method == 'POST' and form.validate_on_submit():
 		entry = Entry()
 		entry.user_id = g.user.user_id
-		entry.create_time = datetime.datetime.now()
+		entry.create_time = datetime.datetime.utcnow()
 		form.populate_obj(entry)
 		db.session.add(entry)
 		db.session.commit()
@@ -95,6 +95,7 @@ def edit_entry(entryid):
 	if request.method == 'POST' and form.validate_on_submit():
 		# save new data in entry here
 		form.populate_obj(entry)
+		entry.create_time = datetime.datetime.utcnow()
 		form.user_id = g.user.user_id
 		db.session.add(entry)
 		db.session.commit()
