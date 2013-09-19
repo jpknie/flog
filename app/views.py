@@ -60,6 +60,18 @@ def edit_tag(tagid):
 	tag = Tag.query.get(int(tagid))
 	return render_template('tag_editor.html', form_action = 'edit_tag', form = form, page_title = page_title)
 
+@app.route('/delete_tag/<int:tagid>', methods=['GET', 'POST'])
+@login_required
+def delete_tag(tagid):
+	if g.user.is_admin() != 1:
+		flash('This user cannot delete tags!')
+		return redirect(url_for('tags'))
+	tag = Tag.query.get(int(tagid))
+	db.session.delete(tag)
+	db.session.commit()
+	flash('Tag removed successfully')
+	return redirect(url_for('tags'))
+
 @app.route('/tags')
 def tags():
 	page_title = 'Tag collection'
