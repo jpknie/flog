@@ -24,7 +24,7 @@ def before_request():
 def entries(page = 1):
 	user = g.user
 	page_title = "Flog 0.01"
-	entries = Entry().all_entries().paginate(page, ITEMS_PER_PAGE, False)
+	entries = Entry().all_entries().order_by(Entry.create_time).paginate(page, ITEMS_PER_PAGE, False)
 	return render_template('entries.html', page_title = page_title, entries = entries)
 
 @app.route('/add_tag', methods=['GET', 'POST'])
@@ -96,7 +96,6 @@ def edit_entry(entryid):
 		# save new data in entry here
 		form.populate_obj(entry)
 		entry.create_time = datetime.datetime.utcnow()
-		form.user_id = g.user.user_id
 		db.session.add(entry)
 		db.session.commit()
 		return redirect(url_for('entries'))
