@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<hr>
-<div id="content">
+<div class="content">
 	{% for entry in entries.items %}
 	<div>
 		<h2>{{entry.title}}</h2>
@@ -23,7 +22,6 @@
 			Older posts
 		{% endif %}
 	{% endif %}
-    <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>

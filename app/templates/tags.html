@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <br>
+<div class="content">
 <h2>
-	Tag collection
+	{{page_title}}
 </h2>
 <table class="table table-condensed">
 	{% for row in tags %}
@@ -19,4 +20,5 @@
 		</tr>
 	{% endfor %}
 </table>
+</div>
 {% endblock %}
