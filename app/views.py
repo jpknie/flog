@@ -1,12 +1,20 @@
 from app import app, lm
 from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask.ext.sqlalchemy import Pagination
 from flask import render_template, Flask, request, session, g, redirect, url_for, \
 	abort, flash
 from sqlalchemy.exc import IntegrityError
-from forms import LoginForm, EntryForm, TagForm
+from forms import LoginForm, EntryForm, TagForm, SearchForm
 from config import ITEMS_PER_PAGE, COLS_IN_TAG_TABLE
 from utilities import chunks
 from models import *
+
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_searchable import Searchable
+from sqlalchemy_utils.types import TSVectorType
+from sqlalchemy_searchable import parse_search_query
+from sqlalchemy_searchable import search
+#from sqlalchemy_utils import tsvector_match, tsvector_concat, to_tsquery
 
 import datetime
 
@@ -16,15 +24,29 @@ def load_user(userid):
 
 @app.before_request
 def before_request():
+	g.search_form = SearchForm()
 	g.user = current_user
+
+@app.route('/search', methods = ['POST'])
+def search_entries():
+	page_title = "Search results"
+	if g.search_form.validate_on_submit():
+		search_stmt = g.search_form.search.data
+		query = db.session.query(Entry)
+		query = search(query, search_stmt)
+		entries = query.order_by(Entry.create_time.desc()).all()
+		return render_template('search_results.html', page_title = page_title, entries = entries)
+	else:
+		flash('No search input given!')
+		return redirect(url_for('entries'))
 
 @app.route('/')
 @app.route('/entries')
 @app.route('/entries/<int:page>')
 def entries(page = 1):
 	user = g.user
-	page_title = "Flog 0.01"
-	entries = Entry().all_entries().order_by(Entry.create_time).paginate(page, ITEMS_PER_PAGE, False)
+	page_title = "Blog entries"
+	entries = Entry().all_entries().order_by(Entry.create_time.desc()).paginate(page, ITEMS_PER_PAGE, False)
 	return render_template('entries.html', page_title = page_title, entries = entries)
 
 @app.route('/add_tag', methods=['GET', 'POST'])

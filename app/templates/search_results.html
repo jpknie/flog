@@ -2,7 +2,7 @@
 {% block content %}
 <div class="content">
 	<h2>{{page_title}}</h2>
-	{% for entry in entries.items %}
+	{% for entry in entries %}
 	<div>
 		<h2>{{entry.title}}</h2>
 		<p>
@@ -11,18 +11,6 @@
 	</p>
 	</div>
 	{% endfor %}
-	{% if entries.items|length != 0: %}
-		{% if entries.has_prev %}
-			<a href="{{ url_for('entries', page = entries.prev_num) }}"> Newer posts</a>
-		{% else %}
-			Newer posts
-		{% endif %} |
-		{% if entries.has_next %}
-			<a href="{{ url_for('entries', page = entries.next_num) }}"> Older posts</a>
-		{% else %}
-			Older posts
-		{% endif %}
-	{% endif %}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>

@@ -12,3 +12,6 @@ class EntryForm(Form):
 
 class TagForm(Form):
 	name = TextField('Name', [Required()])
+
+class SearchForm(Form):
+	search = TextField('search', validators = [Required()])

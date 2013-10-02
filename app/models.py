@@ -1,6 +1,9 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from database import db
 
+from sqlalchemy_searchable import Searchable
+from sqlalchemy_utils.types import TSVectorType
+
 tags = db.Table('tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id')),
     db.Column('entry_id', db.Integer, db.ForeignKey('entry.id'))
@@ -39,8 +42,9 @@ class User(db.Model):
 	def __repr__(self):
 		return '<User %r, %r, %r>' % (self.user_id, self.realname, self.login_name)
 
-class Entry(db.Model):
+class Entry(db.Model, Searchable):
 	__tablename__ = 'entry'
+	__searchable_columns__ = ['title', 'text']
 
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(200), unique=False)
@@ -48,6 +52,8 @@ class Entry(db.Model):
 	text = db.Column(db.String(500), unique=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
 	tags = db.relationship('Tag', secondary=tags, backref=db.backref('entries', lazy='dynamic'))
+
+	search_vector = db.Column(TSVectorType)
 
 	def all_entries(self):
 		return Entry.query.options(db.joinedload('author'))
