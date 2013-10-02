@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% set active_page = "entries" %}
 <div class="content">
 	<h2>{{page_title}}</h2>
 	{% for entry in entries.items %}

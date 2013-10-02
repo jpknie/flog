@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+{% set navigation_bar = [
+    ('/', 'entries', 'Entries'),
+    ('/tags', 'tags', 'Tags'),
+] -%}
+{% set active_page = active_page|default('entries') -%}
+
 <html>
   <head>
     <title>Welcome to Flog!</title>
@@ -17,8 +24,9 @@
           <a class="brand" href="#">Flog - the flask blog</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="/entries">Entries</a></li>
-              <li><a href="/tags">Tags</a></li>
+              {% for href, id, caption in navigation_bar %}
+              <li{% if id == active_page %} class="active"{% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+              {% endfor %}
             </ul>
             <form class="navbar-search" action="{{url_for('search_entries')}}" method="post" name="search">  
               {{g.search_form.hidden_tag()}}{{g.search_form.search(size=500, class_='search-query')}}
