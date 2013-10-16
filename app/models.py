@@ -67,3 +67,8 @@ class Tag(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(200), unique=True, nullable=False)
 
+	@property
+	def serialize(self):
+		# Refer to: https://github.com/twitter/typeahead.js/#datum
+		return { 'id': str(self.id), 'name': self.name, 'tokens': [self.name], 'value': self.name } 
+
