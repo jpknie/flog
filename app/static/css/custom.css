@@ -1,6 +1,9 @@
 // my custom styles
 
-.container { overflow: hidden; } /* hide extra shadows */
+.container {
+	overflow: hidden;
+}
+/* hide extra shadows */
 .container > .inner {
     margin: 10px 30px; /* big enough to contain the shadow */
     overflow: hidden; /* be sure that nothing overflows from the inner */
@@ -17,4 +20,5 @@
 .container > .inner .content {
 	margin: 30px 30px 30px 30px;
 	margin-left: 30px;
+	min-height: 1000px;
 }

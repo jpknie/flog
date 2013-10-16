@@ -7,16 +7,17 @@ from sqlalchemy.exc import IntegrityError
 from forms import LoginForm, EntryForm, TagForm, SearchForm
 from config import ITEMS_PER_PAGE, COLS_IN_TAG_TABLE
 from utilities import chunks
-from models import *
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_searchable import Searchable
 from sqlalchemy_utils.types import TSVectorType
 from sqlalchemy_searchable import parse_search_query
 from sqlalchemy_searchable import search
-#from sqlalchemy_utils import tsvector_match, tsvector_concat, to_tsquery
+
+from models import *
 
 import datetime
+import simplejson as json
 
 @lm.user_loader
 def load_user(userid):
@@ -112,6 +113,12 @@ def tags():
 	tags = list(chunks(tags, COLS_IN_TAG_TABLE))
 	return render_template('tags.html', page_title = page_title, tags = tags, admin = bool(admin))
 
+@app.route('/tags/json')
+def tags_json():
+	tags = Tag.query.all()
+	results = [tag.serialize for tag in tags]
+	return json.dumps(results)
+
 @app.route('/add_entry', methods=['GET', 'POST'])
 @login_required
 def add_entry():
@@ -125,7 +132,9 @@ def add_entry():
 		db.session.add(entry)
 		db.session.commit()
 		return redirect(url_for('entries'))
-	return render_template('entry_editor.html', form_action = 'add_entry', form = form, page_title = page_title)
+	tags = Tag.query.all()
+	tags = list(chunks(tags, COLS_IN_TAG_TABLE))
+	return render_template('entry_editor.html', form_action = 'add_entry', form = form, tags = tags, page_title = page_title)
 
 @app.route('/edit_entry/<int:entryid>', methods=['GET', 'POST'])
 @login_required
@@ -143,7 +152,7 @@ def edit_entry(entryid):
 		db.session.add(entry)
 		db.session.commit()
 		return redirect(url_for('entries'))
-	return render_template('entry_editor.html', form_action = 'edit_entry', form = form, page_title = page_title)
+	return render_template('entry_editor.html', form_action = 'edit_entry', form = form, tags = None, page_title = page_title)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

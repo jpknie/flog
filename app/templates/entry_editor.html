@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="content">
-    <form action="" method="post" class="form">
+    <form action="" method="post" class="form-inline">
     {{ form.csrf_token }}
       <dl>
         <dt>Title:
         <dd>{{ form['title'] }}
         <dt>Text:
         <dd>{{ form['text'] }}
+        <br/>
         <dd><input type=submit value="Save">
       </dl>
+        <dl>
+        <dt>Tags:
+        <input type="text" name="tags" placeholder="Tags" autocomplete="off" style="width:9em;" class="input-medium tm-input tm-input-success" data-original-title=""/>
+        </dl>
     </form>
     <hr>
     {% with messages = get_flashed_messages() %}
