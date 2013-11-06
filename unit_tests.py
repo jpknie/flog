@@ -1,13 +1,14 @@
-#!flask/bin/python
-
 import os
-import unittest
+import pytest
 
 from app import app
 from app.database import db
 from app.models import *
 
-class TestUser(unittest.TestCase):
+class TestUser:
+	def test_user():
+
+
 	def setUp(self):
 		app.config['TESTING'] = True
 		app.config['CSRF_ENABLED'] = False
